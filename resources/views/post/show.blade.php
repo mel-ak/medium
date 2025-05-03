@@ -10,11 +10,12 @@
                     <div class="flex gap-4">
                         <x-user-avatar :user="$post->user" />
                         <div>
-                            <div class="flex gap-2">
+                            <x-follow-ctr :user="$post->user" class="flex gap-2">
                                 <a href="{{ route('profile.show', $post->user) }}" class="hover:underline">{{ $post->user->name }}</a>
                                 &middot;
-                                <a href="#" class="text-emerald-600">Follow</a>
-                            </div>
+                                <button x-text="following ? 'Unfollow' : 'Follow'" :class="following ? 'text-red-600' : 'text-emerald-600'" @click="follow()">
+                                </button>
+                            </x-follow-ctr>
                             <div class="flex gap-2 text-sm text-gray-500">
                                 {{ $post->readTime() }} min read
                                 &middot;
@@ -25,7 +26,7 @@
                     <!-- User Avatar -->
 
                     <!-- Claps -->
-                    <x-clap-button />
+                    <x-clap-button :post="$post" />
                      <!-- Claps -->
 
                      <!-- Content -->
@@ -41,7 +42,7 @@
                      </div>
 
                      <!-- Claps -->
-                    <x-clap-button />
+                    <x-clap-button :post="$post" />
                      <!-- Claps -->
                 </div>
             </div>

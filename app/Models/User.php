@@ -55,6 +55,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class);
     }
 
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
+    }
+    
+
     public function imageUrl()
     {
         if($this->image) {
@@ -62,4 +73,21 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy2fpkD9QJtyaIMZJ285gTSRuGKhCFb1alUQ&s';
     }
+
+    public function isFollowedBy(User $user)
+    {
+        return $this->followers()->where('follower_id', $user->id)->exists();
+    }
+
+    public function claps()
+    {
+        return $this->hasMany(Clap::class);
+    }
+
+    public function hasClapped(Post $post)
+    {
+        return $this->claps()->where('post_id', $post->id)->exists();
+    }
+
+
 }
